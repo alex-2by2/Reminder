@@ -1,0 +1,74 @@
+/* Styles for Reminder App */
+
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* Light Mode Styles */
+body.light-mode {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Responsive Design */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+}
+
+/* Button Styles */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.primary {
+    background-color: #6200ea;
+    color: white;
+}
+
+button.primary:hover {
+    background-color: #3700b3;
+}
+
+/* Animations */
+.fade {
+    animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Accessibility Improvements */
+a {
+    color: #6200ea;
+    text-decoration: none;
+}
+a:focus, a:hover {
+    text-decoration: underline;
+    outline: 2px solid #6200ea;
+}
