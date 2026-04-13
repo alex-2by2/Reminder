@@ -1,17 +1,11 @@
-const CACHE_NAME = 'master-reminder-v3';
-
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/sw.js'
-];
+const CACHE_NAME = 'master-reminder-v4';
 
 self.addEventListener('install', (e) => {
     e.waitUntil(
         caches.open(CACHE_NAME).then(cache => {
-            return cache.addAll(urlsToCache);
-        })
+            // Vercel ના 308 રીડાયરેક્ટ પ્રોબ્લેમથી બચવા આપણે માત્ર રૂટ '/' જ કેશ કરીશું
+            return cache.addAll(['/']);
+        }).catch(err => console.log('Cache error:', err))
     );
     self.skipWaiting();
 });
@@ -32,14 +26,12 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
+    // Network First સ્ટ્રેટેજી: પહેલા ઇન્ટરનેટથી લેવાનો પ્રયાસ કરશે, ના મળે તો જ ઓફલાઈન કેશમાંથી આપશે
     e.respondWith(
-        caches.match(e.request).then(response => {
-            // જો ફાઈલ કેશ (Cache) માં હોય તો તે આપો, નહીંતર ઇન્ટરનેટ પરથી લાવો
-            return response || fetch(e.request).catch(() => {
-                // જો ઇન્ટરનેટ બંધ હોય (Offline) તો એપ ક્રેશ થવાને બદલે મેઈન પેજ જ ખૂલશે
-                if (e.request.mode === 'navigate') {
-                    return caches.match('/');
-                }
+        fetch(e.request).catch(() => {
+            return caches.match(e.request).then(response => {
+                // જો માંગેલી વસ્તુ કેશમાં ના હોય, તો સીધું હોમ પેજ ('/') આપી દો
+                return response || caches.match('/');
             });
         })
     );
